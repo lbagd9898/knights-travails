@@ -24,51 +24,67 @@ class Graph {
       let [x, y] = JSON.parse(key);
       let a = x + 1;
       let b = y + 2;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x + 2;
       b = y + 1;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x + 2;
       b = y - 1;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x + 1;
       b = y - 2;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x - 1;
       b = y + 2;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x - 2;
       b = y - 1;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x - 2;
       b = y + 1;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
       a = x - 1;
       b = y - 2;
-      if (-1 <= a && a < 8 && -1 < b && b < 8) {
+      if (0 <= a && a < 8 && 0 <= b && b < 8) {
         let linkedNode = this.nodes[`[${a},${b}]`];
-        this.nodes[key].adjacentNodes.push(linkedNode);
+        if (linkedNode) {
+          this.nodes[key].adjacentNodes.push(linkedNode);
+        }
       }
     }
   }
@@ -79,31 +95,38 @@ class Graph {
     }
   }
 
+  printNode(key) {
+    let node = this.nodes[key];
+    console.log(node.data);
+    for (let i = 0; i < node.adjacentNodes.length; i++) {
+      console.log(node.adjacentNodes[i].data);
+    }
+  }
+
   findPath(start, end) {
     let queue = [start];
     let visited = new Set();
     let currNode = start;
-    let cameFrom = {};
+    let cameFrom = new Map();
     visited.add(currNode);
     while (queue.length != 0) {
       if (currNode === end) {
         let path = [];
         let prev = end;
-        path.push(prev);
-        while (prev != start) {
-          prev = cameFrom[prev];
+        while (prev !== start) {
           path.push(prev);
+          prev = cameFrom.get(prev);
         }
         path.push(start);
+        console.log("path: " + path);
         return path.reverse();
       }
-      console.log(currNode);
       for (let i = 0; i < currNode.adjacentNodes.length; i++) {
         let neighbor = currNode.adjacentNodes[i];
         if (!visited.has(neighbor)) {
           visited.add(neighbor);
           queue.push(neighbor);
-          cameFrom[neighbor] = currNode;
+          cameFrom.set(neighbor, currNode);
         }
       }
       currNode = queue.shift();
@@ -117,7 +140,8 @@ class Graph {
     let startNode = this.nodes[startKey];
     let endNode = this.nodes[endKey];
     let path = this.findPath(startNode, endNode);
-    console.log(path);
+    console.log(`You made it in ${path.length - 1} moves! Here is your path:`);
+    console.log(path.map((node) => node.data));
   }
 }
 
@@ -127,4 +151,4 @@ graph.constructGraph();
 
 graph.linkNodes();
 
-graph.knightMoves([3, 3], [4, 3]);
+graph.knightMoves([0, 0], [7, 7]);
